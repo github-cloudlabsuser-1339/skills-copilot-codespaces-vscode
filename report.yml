@@ -1,0 +1,23 @@
+# Create a GitHub action to email a report from a file at 6 a.m. daily
+name: Daily Report Email
+on:
+  schedule:
+    - cron: '0 6 * * *' # At 06:00 AM every day
+  workflow_dispatch: # Allows manual trigger of the workflow
+jobs:
+  email_report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Send email with report
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.example.com # SMTP server address
+          server_port: 587 # SMTP server port
+          username: ${{ secrets.SMTP_USERNAME }} # SMTP username
+          password: ${{ secrets.SMTP_PASSWORD }} # SMTP password
+          subject: Daily Report
+          body: Please find the attached report.
+          to:
